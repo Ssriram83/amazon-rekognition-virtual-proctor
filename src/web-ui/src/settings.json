@@ -1,0 +1,7 @@
+{
+    "apiGateway": "https://tznyzwe654.execute-api.us-east-1.amazonaws.com/Prod/",
+    "cognitoIdentityPool": "us-east-1:f29177b3-5989-4ef7-bf65-09108e8a5bf7",
+    "cognitoUserPoolId": "us-east-1_y7aAvqKxd",
+    "cognitoUserPoolClientId": "20ou7fklvph4e4fheck3ctkrrs",
+    "region": "us-east-1"
+}

@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amazonrekognitionvir-dev-195324-authRole",
+      "UnauthRoleArn": "arn:aws:iam::754607055130:role/amplify-amazonrekognitionvir-dev-195324-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::754607055130:role/amplify-amazonrekognitionvir-dev-195324-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-amazonrekognitionvir-dev-195324-deployment",
+      "UnauthRoleName": "amplify-amazonrekognitionvir-dev-195324-unauthRole",
+      "StackName": "amplify-amazonrekognitionvir-dev-195324",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:754607055130:stack/amplify-amazonrekognitionvir-dev-195324/fda6b860-a6c6-11ec-875f-021b998913a0",
+      "AmplifyAppId": "d1f176tple8ldf"
+    }
+  }
+}

@@ -1,7 +1,6 @@
 import Amplify, { API, Auth } from "aws-amplify";
 import { retryWrapper } from "./index";
-
-const settings = window.rekognitionSettings || {};
+import settings from './settings.json'
 const region = settings.region || "eu-west-1";
 
 Amplify.configure({

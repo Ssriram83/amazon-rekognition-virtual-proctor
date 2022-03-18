@@ -91,7 +91,6 @@ const fetchLabels = async (imageBytes) => {
   const objectsOfInterestLabels = OBJECTS_OF_INTEREST_LABELS.trim().split(",");
   const objectsOfInterestTest = { TestName: "Objects of Interest" };
   const peopleTest = { TestName: "Person Detection" };
-
   const detectLabels = () =>
     rekognition
       .detectLabels({
@@ -128,50 +127,7 @@ const fetchLabels = async (imageBytes) => {
   return [objectsOfInterestTest, peopleTest];
 };
 
-const fetchModerationLabels = async (imageBytes) => {
-  /*
-    Detect Unsafe Content
-    Uses Rekognition's DetectModerationLabels functionality
-  */
-  const moderationLabelsTest = {
-    TestName: "Unsafe Content",
-  };
-
-  const detectModerationLabels = () =>
-    rekognition
-      .detectModerationLabels({
-        Image: { Bytes: imageBytes },
-        MinConfidence: MIN_CONFIDENCE,
-      })
-      .promise();
-
-  try {
-    const labels = await detectModerationLabels();
-    const nLabels = labels.ModerationLabels.length;
-    moderationLabelsTest.Success = nLabels === 0;
-    moderationLabelsTest.Details = moderationLabelsTest.Success
-      ? "0"
-      : labels.ModerationLabels.map((l) => l.Name)
-          .sort()
-          .join(", ");
-  } catch (e) {
-    console.log(e);
-    moderationLabelsTest.Success = false;
-    moderationLabelsTest.Details = `Server error`;
-  }
-
-  return moderationLabelsTest;
-};
-
 const searchForIndexedFaces = async (imageBytes) => {
-  /*
-    Face Matching
-
-    Uses Rekognition's SearchFacesByImage functionality 
-    to match face across the database of previously 
-    indexed faces
-  */
-
   const faceMatchTest = {
     TestName: "Person Recognition",
     Success: false,
@@ -213,6 +169,49 @@ const searchForIndexedFaces = async (imageBytes) => {
   return faceMatchTest;
 };
 
+const checkIfWearingMask = async (imageBytes) => {
+  const responseText = {
+    TestName: "Wearing Mask?",
+    Success: false,
+    Details: "0",
+  };
+
+  const detectPPE = () =>
+    rekognition
+    .detectProtectiveEquipment({
+      Image: { Bytes: imageBytes },
+      SummarizationAttributes: {
+          RequiredEquipmentTypes: ["FACE_COVER"],
+          MinConfidence: MIN_CONFIDENCE
+      }
+  })
+  .promise();
+
+  try {
+    const detectPPEResults = await detectPPE();
+    let bodyParts = detectPPEResults.Persons[0].BodyParts
+    let isEquipmentDetected = false;
+    let isEquipmentWornProperly = false;
+    if (bodyParts[0].EquipmentDetections.length > 0) {
+      isEquipmentDetected = true;
+      if (bodyParts[0].EquipmentDetections[0]?.CoversBodyPart?.Value) {
+        isEquipmentWornProperly = true;
+    }
+    }
+    responseText.Success = isEquipmentDetected && isEquipmentWornProperly
+    if(!isEquipmentDetected){
+      responseText.Details = "Missing Mask"
+  }
+  if(isEquipmentDetected && !isEquipmentWornProperly){
+      responseText.Details = "Mask does not Cover your Nose"
+  }
+    
+  } catch (e) {
+    console.log(e);
+  }
+  return responseText;
+};
+
 exports.processHandler = async (event) => {
   const body = JSON.parse(event.body);
   const imageBytes = Buffer.from(body.image, "base64");
@@ -221,7 +220,7 @@ exports.processHandler = async (event) => {
     fetchLabels(imageBytes),
     searchForIndexedFaces(imageBytes),
     fetchFaces(imageBytes),
-    fetchModerationLabels(imageBytes),
+    checkIfWearingMask(imageBytes)
   ]);
 
   return respond(200, result.flat());

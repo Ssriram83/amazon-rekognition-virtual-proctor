@@ -3,13 +3,10 @@ import { AmplifyAuthenticator, AmplifySignIn } from "@aws-amplify/ui-react";
 import { onAuthUIStateChange } from "@aws-amplify/ui-components";
 import Webcam from "react-webcam";
 import { Col, Row } from "react-bootstrap";
-
 import gateway from "./utils/gateway";
-
 import CameraHelp from "./components/CameraHelp";
 import EngagementSummary from "./components/EngagementsSummary";
 import Header from "./components/Header";
-import SettingsHelp from "./components/SettingsHelp";
 
 const App = () => {
   const [authState, setAuthState] = useState(undefined);
@@ -71,7 +68,6 @@ const App = () => {
       />
       {signedIn ? (
         <>
-          <SettingsHelp show={!window.rekognitionSettings} />
           <CameraHelp show={!readyToStream} />
           <Row>
             <Col md={8} sm={6}>
@@ -81,7 +77,6 @@ const App = () => {
                 videoConstraints={{
                   width: 1280,
                   height: 640,
-                  facingMode: "user",
                 }}
                 style={{ width: "100%", marginTop: "10px" }}
               />

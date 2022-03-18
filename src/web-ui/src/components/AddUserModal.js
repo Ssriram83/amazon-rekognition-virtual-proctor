@@ -47,7 +47,7 @@ const AddUserModal = ({ onSave }) => {
   return (
     <>
       <Button onClick={() => toggle(true)} size="sm">
-        Add a new user
+        Enroll Employee
       </Button>
       <Modal show={show} onHide={toggle}>
         <Modal.Header closeButton>
@@ -116,7 +116,7 @@ const AddUserModal = ({ onSave }) => {
             disabled={!fullName || !image || formState !== "initial"}
             show="false"
           >
-            Add User
+            Enroll New Employee
           </Button>
           <Button onClick={toggle}>Close</Button>
         </Modal.Footer>

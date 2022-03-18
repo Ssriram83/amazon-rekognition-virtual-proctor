@@ -26,9 +26,12 @@ const Header = ({ addUser, readyToStream, signedIn, toggleRekognition }) => {
   }, [signedIn]);
 
   return (
-    <Navbar bg="dark" expand="lg">
+    <Navbar variant="dark" className="justify-content-center">
       <Navbar.Brand>
-        <div className="awslogo" />
+        <div>
+          <h3 style={{ textAlign: "center" }}>Covid Screening Kiosk</h3>
+        </div>
+        
       </Navbar.Brand>
       <Navbar.Toggle />
       {(userEmail || authError) && (
